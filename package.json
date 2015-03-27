@@ -1,0 +1,14 @@
+{
+  "name": "MEANstack",
+  "version": "1.0.0",
+  "description": "\"MEAN stack project following book from learnable.com\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alejandro Cerro",
+  "license": "MIT",
+  "dependencies": {
+    "colors": "^1.0.3"
+  }
+}
