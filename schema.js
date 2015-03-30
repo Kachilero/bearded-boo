@@ -3,11 +3,9 @@
  */
 var mongoose  = require('mongoose'),
     color     = require('colors'),
-    Schema    = mongoose.Schema;
-
-var db = mongoose.connection;
-
-var dbUrl = "mongodb://alejandro:mheartbleedb456@ds031691.mongolab.com:31691/heroku_app35354312";
+    Schema    = mongoose.Schema,
+    db        = mongoose.connection,
+    dbUrl     = "mongodb://alejandro:mheartbleedb456@ds031691.mongolab.com:31691/heroku_app35354312";
 
 var TeamSchema = new Schema({
   name: {
@@ -15,6 +13,7 @@ var TeamSchema = new Schema({
     required: true
   }
 });
+var Team = mongoose.model('Team', TeamSchema);
 
 var EmployeeSchema = new Schema({
   name: {
@@ -44,8 +43,6 @@ var EmployeeSchema = new Schema({
     }
   }
 });
-
-var Team = mongoose.model('Team', TeamSchema);
 var Employee = mongoose.model('Employee', EmployeeSchema);
 
 db.on('error',function(){
@@ -54,19 +51,24 @@ db.on('error',function(){
 
 function insertTeams(callback){
   Team.create([{
-    name: 'Product Development'
-  },{
-    name: 'Dev Ops'
-  },{
-    name: 'Accounting'
-  }], function(error,pd,devops,acct){
-    if(error){
-      callback(error);
-    }else{
-      console.info("Teams Created Successfully");
-      callback(null,pd,devops,acct);
-    }
-  });
+      name: 'Product Development'
+    },{
+      name: 'Dev Ops'
+    },{
+      name: 'Accounting'
+    }],
+    function(error,pd,devops,acct){
+      if(error){
+        callback(error);
+      }else{
+
+        console.info("Teams Created Successfully".cyan);
+        console.info("Pro Dev [".magenta+color.green(pd)+"]".magenta);
+        console.info("Dev Ops [".magenta+color.green(devops)+"]".magenta);
+        console.info("Acct    [".magenta+color.green(acct)+"]".magenta);
+        callback(null,pd,devops,acct);
+      }
+    });
 }
 
 function insertEmployees(pd,devops,acct,callback){
@@ -158,27 +160,12 @@ mongoose.connect(dbUrl, function(err){
   insertTeams(function (err,pd,devops,acct){
     if(err){ return console.error(err); }
     insertEmployees(pd,devops,acct, function(err,result){
-      if(err){ console.error(err); }
+      if(err){
+        console.error(color.red(err)); }
       else{ console.info("Database Activity Complete"); }
 
       db.close();
       process.exit();
     })
   });
-
-  /**Code below is for one team*/
-  /*var team = new Team({
-    name: "Product Development"
-  });
-
-  team.save(function(error,data){
-    if(error){
-      console.log(error);
-    }else{
-      console.dir(data);
-    }
-
-    db.close();
-    process.exit();
-  });*/
 });
