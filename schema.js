@@ -46,6 +46,79 @@ var EmployeeSchema = new Schema({
 });
 
 var Team = mongoose.model('Team', TeamSchema);
+var Employee = mongoose.model('Employee', EmployeeSchema);
+
+function insertTeams(callback){
+  Team.create([{
+    name: 'Product Development'
+  },{
+    name: 'Dev Ops'
+  },{
+    name: 'Accounting'
+  }], function(error,pd,devops,acct){
+    if(error){
+      callback(error);
+    }else{
+      console.info("Teams Created Successfully")
+      callback(null,pd,devops,acct);
+    }
+  });
+}
+
+function insertEmployees(pd,devops,acct,callback){
+  Employee.create([{
+    name: {
+      first: 'John',
+      last: 'Adams'
+    },
+    team: pd._id,
+    address: {
+      lines: ['2 Lincoln Memorial Circle NW'],
+      zip: 20037
+    }
+  },{
+    name: {
+      first: 'Thomas',
+      last: 'Jefferson'
+    },
+    team: devops._id,
+    address: {
+      lines: ['Aajdlfjaldjfl;k'],
+      zip: 20500,
+    }
+  },{
+    name: {
+      first: 'James',
+      last: 'Madison'
+    },
+    team: acct._id,
+    address: {
+      lines: ['2 15th street'],
+      zip: 20007,
+    }
+  },{
+    name: {
+      first: 'James',
+      last: 'Monroe'
+    },
+    team: acct._id,
+    address: {
+      lines: ['1850 West'],
+      zip: 20242,
+    }
+  }],function(error,johnadams){
+    if(error){
+      return callback(error);
+    }else{
+      console.info("Employees Successfully Added");
+      callback(null,{
+        team: pd,
+        employee: johnadams
+      });
+    }
+  })
+}
+
 
 db.on('error',function(){
   console.log("There was an error communicating with the database".red);
@@ -56,7 +129,10 @@ mongoose.connect(dbUrl, function(err){
     return console.log("There was an error connecting to the database [".red+color.green(err)+"]".red+color.white(err.stack));}
   console.log("Connected!".cyan);
 
-  var team = new Team({
+
+
+  /**Code below is for one team*/
+  /*var team = new Team({
     name: "Product Development"
   });
 
@@ -69,5 +145,5 @@ mongoose.connect(dbUrl, function(err){
 
     db.close();
     process.exit();
-  });
+  });*/
 });
