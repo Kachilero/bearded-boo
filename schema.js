@@ -48,6 +48,10 @@ var EmployeeSchema = new Schema({
 var Team = mongoose.model('Team', TeamSchema);
 var Employee = mongoose.model('Employee', EmployeeSchema);
 
+db.on('error',function(){
+  console.log("There was an error in db while communicating with the database".red);
+});
+
 function insertTeams(callback){
   Team.create([{
     name: 'Product Development'
@@ -59,7 +63,7 @@ function insertTeams(callback){
     if(error){
       callback(error);
     }else{
-      console.info("Teams Created Successfully")
+      console.info("Teams Created Successfully");
       callback(null,pd,devops,acct);
     }
   });
@@ -83,8 +87,8 @@ function insertEmployees(pd,devops,acct,callback){
     },
     team: devops._id,
     address: {
-      lines: ['Aajdlfjaldjfl;k'],
-      zip: 20500,
+      lines: ['1600 Pennsilvania Ave','White House'],
+      zip: 20500
     }
   },{
     name: {
@@ -93,8 +97,8 @@ function insertEmployees(pd,devops,acct,callback){
     },
     team: acct._id,
     address: {
-      lines: ['2 15th street'],
-      zip: 20007,
+      lines: ['2 15th street NW','PO Box 8675309'],
+      zip: 20007
     }
   },{
     name: {
@@ -103,8 +107,8 @@ function insertEmployees(pd,devops,acct,callback){
     },
     team: acct._id,
     address: {
-      lines: ['1850 West'],
-      zip: 20242,
+      lines: ['1850 West Basin Dr SW','Suite 210'],
+      zip: 20242
     }
   }],function(error,johnadams){
     if(error){
@@ -119,17 +123,48 @@ function insertEmployees(pd,devops,acct,callback){
   })
 }
 
+function retrieveEmployee(data,callback){
+  Employee.findOne({
+    _id: data.employee._id
+  }).populate('team').exec(function(error,result){
+    if(error){ return callback(error); }
+    else{
+      console.log('*** Single Employee Result ***');
+      console.dir(result);
+      callback(null,data);
+    }
+  });
+}
 
-db.on('error',function(){
-  console.log("There was an error communicating with the database".red);
-});
+function retrieveMultipleEmployees(data,callback){
+  Employee.find({
+    'name.first': /J/i
+  }, function(error,results){
+    if(error){ return callback(error); }
+    else{
+      console.log("*** Multiple Employees Result ***");
+      console.dir(results);
+      callback(null,data);
+    }
+  })
+}
 
 mongoose.connect(dbUrl, function(err){
   if(err){
-    return console.log("There was an error connecting to the database [".red+color.green(err)+"]".red+color.white(err.stack));}
+    return console.log("There was an error connecting to the database [".red+color.green(err)+"]".red);
+  }
   console.log("Connected!".cyan);
 
+  insertTeams(function (err,pd,devops,acct){
+    if(err){ return console.error(err); }
+    insertEmployees(pd,devops,acct, function(err,result){
+      if(err){ console.error(err); }
+      else{ console.info("Database Activity Complete"); }
 
+      db.close();
+      process.exit();
+    })
+  });
 
   /**Code below is for one team*/
   /*var team = new Team({
