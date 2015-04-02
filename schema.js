@@ -61,27 +61,6 @@ function insertTeams(callback){
       if(error){
         callback(error);
       }else{
-        console.info("Length  [".magenta+color.(Team.length)+"]".magenta);
-        console.info("Breadth [".magenta+color.green(Object.keys(Team))+"]".magenta);
-        console.info("Hooks                    [".magenta+color.green(Object.keys(Team.hooks))+"]".magenta);
-        console.info("Base                     [".magenta+color.green(Object.keys(Team.base))+"]".magenta);
-        console.info("Model Name               [".magenta+color.green(Team.modelName)+"]".magenta);
-        console.info("Model                    [".magenta+color.green(Team.model)+"]".magenta);
-        console.info("base.models              [".magenta+color.cyan(Object.keys(Team.base.models))+"]".magenta);
-        console.info("DB                       [".magenta+color.green(Object.keys(Team.db))+"]".magenta);
-        console.info("Discriminators           [".magenta+color.green(Team.discriminators)+"]".magenta);
-        console.info("Schema                   [".magenta+color.green(Team.schema)+"]".magenta);
-        console.info("Collection               [".magenta+color.green(Object.keys(Team.collection))+"]".magenta);
-        console.info("DB.models                [".magenta+color.red(Object.keys(db.models))+"]".magenta);
-        console.info("DB.models.Team           [".magenta+color.red(Object.keys(db.models.Team))+"]".magenta);
-        console.info("DB.models.Employee       [".magenta+color.red(Object.keys(db.models.Employee))+"]".magenta);
-        console.info("Collection.collection    [".magenta+color.green(Team.collection)+"]".magenta);
-        console.info("Collection.opts          [".magenta+color.green(Team.collection.collection)+"]".magenta);
-        console.info("Collection.name          [".magenta+color.green(Team.collection.name)+"]".magenta);
-        console.info("Collection.conn          [".magenta+color.green(Team.collection.conn)+"]".magenta);
-        console.info("Collection.queue         [".magenta+color.green(Team.collection.queue)+"]".magenta);
-        console.info("Collection.buffer        [".magenta+color.green(Team.collection.buffer)+"]".magenta);
-
         console.info("Teams Created Successfully".cyan);
         console.info("Pro Dev [".magenta+color.green(pd)+"]".magenta);
         console.info("Dev Ops [".magenta+color.green(devops)+"]".magenta);
