@@ -4,7 +4,11 @@
  */
 
 var http              = require('http'),
-    employeeService   = require('./lib/employees'),
+    color             = require('colors');
+
+require('./lib/connection');
+
+var employeeService   = require('./lib/employees'),
     responder         = require('./lib/responseGenerator'),
     staticFile        = responder.staticFile('/public');
 
@@ -25,7 +29,7 @@ http.createServer(function (req,res) {
 
   if(_url = /^\/employees$/i.exec(req.url)){
     //return list of employees
-    employeeService.getEmployees(function (error,data) {
+    employeeService.getMultiEmployees(function (error,data) {
       if(error){
         return responder.send500(error, res);
       }
