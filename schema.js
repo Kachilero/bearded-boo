@@ -156,6 +156,16 @@ mongoose.connect(dbUrl, function(err){
   }
   console.log("Connected!".cyan);
 
-  db.close();
-  process.exit();
+  insertTeams(function(err,pd,devops,acct){
+    if(err){ return console.log('Error');}
+    insertEmployees(pd,devops,acct, function(err,result) {
+      if(err){ console.log("Error inserting Employees: " + err); }
+      else{ console.info("Database Activity Complete");}
+
+      db.close();
+      process.exit();
+    })
+  });
+
+
 });
